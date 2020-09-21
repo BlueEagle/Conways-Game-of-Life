@@ -1,24 +1,26 @@
 import React from "react";
 
-const alive = true;
-const dead = false;
+// const alive = true;
+// const dead = false;
 
-const nowBuffer = [25][25];
-for (const row in nowBuffer) {
-  for (const cell in row) {
-    cell = dead;
-  }
+// const nowBuffer = [25][25];
+let test = [];
+for (let i = 0; i <= 25; i++) {
+  test.push(i);
 }
 
-const DisplayCells = () => {
-  return <>{"test"}</>;
-};
+let nowBuffer = [];
+for (let i = 0; i < 25; i++) {
+  nowBuffer.push(i);
+}
 
 const GameGrid = () => {
   return (
-    <>
-      <DisplayCells />
-    </>
+    <div>
+      {nowBuffer.map((number) => (
+        <div>{number}</div>
+      ))}
+    </div>
   );
 };
 
