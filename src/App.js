@@ -11,11 +11,11 @@ function App() {
       <header className="App-header">
         <h1>Conway's Game of Life</h1>
 
+        <GameGrid />
+
         <ButtonDiv>
           <Button variant="contained">Start</Button>
         </ButtonDiv>
-
-        <GameGrid />
       </header>
       <section></section>
       <footer>Created with ❤ by Collin Ballou.</footer>

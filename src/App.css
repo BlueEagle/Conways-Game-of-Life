@@ -1,5 +1,7 @@
+@import url("https://fonts.googleapis.com/css2?family=Grandstander:wght@500&display=swap");
+
 .App {
-  text-align: center;
+  font-family: "Grandstander", cursive;
 }
 
 .App-logo {
@@ -40,5 +42,9 @@
 
 footer {
   background-color: #3d4f75;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 3rem;
   color: hsl(217, 100%, 97%);
 }
