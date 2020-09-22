@@ -1,15 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const Cell = (props) => {
   const [location, setLocation] = useState([props.x, props.y]);
   const [alive, setAlive] = useState(false);
+  const [cells, setCells] = props;
+
+  useEffect(() => {
+    setAlive(cells[`(row: ${props.x}, col: ${props.y})`]);
+  }, cells[`(row: ${props.x}, col: ${props.y})`]);
 
   const clickHandler = () => {
-    setAlive(!alive);
+    // setAlive(!alive);
+    // setCells(...cells, cells[`(row: ${props.x}, col: ${props.y})`]: cells[`(row: ${props.x}, col: ${props.y})`];
+    console.log(cells[`(row: ${props.x}, col: ${props.y})`]);
   };
 
-  return <StyledContainer alive={alive} onClick={clickHandler} />;
+  return (
+    <StyledContainer
+      alive={cells[`(row: ${props.x}, col: ${props.y})`]}
+      onClick={clickHandler}
+    />
+  );
 };
 
 export default Cell;
