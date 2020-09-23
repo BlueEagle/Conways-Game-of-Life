@@ -22,6 +22,10 @@ const GameGrid = () => {
   const [rows, setRows] = useState(initialRows);
   // eslint-disable-next-line
   const [cols, setCols] = useState(initialCols);
+  const [generation, setGeneration] = useState(1);
+  const addGeneration = () => {
+    setGeneration((g) => g + 1);
+  };
 
   const simulationActiveRef = useRef(simulationActive);
   simulationActiveRef.current = simulationActive;
@@ -65,7 +69,8 @@ const GameGrid = () => {
       });
     });
 
-    console.log("Generation");
+    addGeneration();
+    console.log(generation);
     setTimeout(simulation, 500);
   }, [rows, cols]);
 
@@ -103,6 +108,8 @@ const GameGrid = () => {
         ))}
       </div>
 
+      <GenerationTracker>Generation: {generation}</GenerationTracker>
+
       <ButtonDiv>
         <Button
           variant="contained"
@@ -130,5 +137,9 @@ const Row = styled.div`
 `;
 
 const ButtonDiv = styled.div`
+  padding: 1%;
+`;
+
+const GenerationTracker = styled.div`
   padding: 1%;
 `;
