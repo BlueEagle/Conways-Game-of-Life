@@ -7,9 +7,9 @@ const initialRows = 25;
 const initialCols = 25;
 
 let initialBuffer = [];
-for (let i = 0; i < 25; i++) {
+for (let i = 0; i < initialRows; i++) {
   initialBuffer[i] = [];
-  for (let j = 0; j < 25; j++) {
+  for (let j = 0; j < initialCols; j++) {
     initialBuffer[i][j] = false;
   }
 }
@@ -70,9 +70,23 @@ const GameGrid = () => {
     });
 
     addGeneration();
-    console.log(generation);
     setTimeout(simulation, 500);
   }, [rows, cols]);
+
+  const clearBuffer = () => {
+    setBuffer((buffer) => {
+      return produce(buffer, (copy) => {
+        for (let i = 0; i < rows; i++) {
+          for (let j = 0; j < cols; j++) {
+            copy[i][j] = false;
+          }
+        }
+      });
+    });
+
+    setSimulationActive(false);
+    setGeneration(1);
+  };
 
   return (
     <>
@@ -111,8 +125,9 @@ const GameGrid = () => {
       <GenerationTracker>Generation: {generation}</GenerationTracker>
 
       <ButtonDiv>
-        <Button
+        <StyledButton
           variant="contained"
+          color="primary"
           onClick={() => {
             setSimulationActive(!simulationActive);
             if (!simulationActive) {
@@ -122,7 +137,10 @@ const GameGrid = () => {
           }}
         >
           {simulationActive ? "Stop" : "Start"}
-        </Button>
+        </StyledButton>
+        <StyledButton variant="contained" onClick={clearBuffer}>
+          Clear
+        </StyledButton>
       </ButtonDiv>
     </>
   );
@@ -138,6 +156,11 @@ const Row = styled.div`
 
 const ButtonDiv = styled.div`
   padding: 1%;
+`;
+
+const StyledButton = styled(Button)`
+  margin-left: 1rem !important;
+  margin-right: 1rem !important;
 `;
 
 const GenerationTracker = styled.div`
