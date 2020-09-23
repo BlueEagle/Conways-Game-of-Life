@@ -18,7 +18,9 @@ const GameGrid = () => {
   // eslint-disable-next-line
   const [nowBuffer, setBuffer] = useState(initialBuffer);
   const [simulationActive, setSimulationActive] = useState(false);
+  // eslint-disable-next-line
   const [rows, setRows] = useState(initialRows);
+  // eslint-disable-next-line
   const [cols, setCols] = useState(initialCols);
 
   const simulationActiveRef = useRef(simulationActive);
@@ -39,7 +41,7 @@ const GameGrid = () => {
                 j + newJ >= 0 &&
                 j + newJ < cols
               ) {
-                if (copy[i + newI][j + newJ]) neighbors++;
+                if (buffer[i + newI][j + newJ]) neighbors++;
               }
             };
             checkNeighbors(0, 1);
@@ -51,9 +53,11 @@ const GameGrid = () => {
             checkNeighbors(-1, 1);
             checkNeighbors(1, -1);
 
+            // console.log(`Cell: ${i} ${j} - has: ${neighbors}`);
+
             if (neighbors < 2 || neighbors > 3) {
               copy[i][j] = false;
-            } else if (neighbors === 3) {
+            } else if (!buffer[i][j] && neighbors === 3) {
               copy[i][j] = true;
             }
           }
@@ -62,7 +66,7 @@ const GameGrid = () => {
     });
 
     console.log("Generation");
-    setTimeout(simulation, 1000);
+    setTimeout(simulation, 500);
   }, [rows, cols]);
 
   return (
