@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback } from "react";
-import { Button } from "@material-ui/core";
+import { Button, Slider } from "@material-ui/core";
 import styled from "styled-components";
 import produce from "immer";
 
@@ -23,12 +23,15 @@ const GameGrid = () => {
   // eslint-disable-next-line
   const [cols, setCols] = useState(initialCols);
   const [generation, setGeneration] = useState(1);
+  const [stepSpeed, setStepSpeed] = useState(1000);
   const addGeneration = () => {
     setGeneration((g) => g + 1);
   };
 
   const simulationActiveRef = useRef(simulationActive);
   simulationActiveRef.current = simulationActive;
+  const stepSpeedRef = useRef(stepSpeed);
+  stepSpeedRef.current = stepSpeed;
 
   const simulation = useCallback(() => {
     if (!simulationActiveRef.current) return;
@@ -70,7 +73,7 @@ const GameGrid = () => {
     });
 
     addGeneration();
-    setTimeout(simulation, 500);
+    setTimeout(simulation, stepSpeedRef.current);
   }, [rows, cols]);
 
   const clearBuffer = () => {
@@ -86,6 +89,26 @@ const GameGrid = () => {
 
     setSimulationActive(false);
     setGeneration(1);
+  };
+
+  const randomizeBuffer = () => {
+    setBuffer((buffer) => {
+      return produce(buffer, (copy) => {
+        for (let i = 0; i < rows; i++) {
+          for (let j = 0; j < cols; j++) {
+            copy[i][j] = Math.floor(Math.random() * 10) > 5 ? true : false;
+          }
+        }
+      });
+    });
+
+    setSimulationActive(false);
+    setGeneration(1);
+  };
+
+  const speedChangeHandler = (e, value) => {
+    setStepSpeed((speed) => value);
+    stepSpeedRef.current = value;
   };
 
   return (
@@ -124,7 +147,7 @@ const GameGrid = () => {
 
       <GenerationTracker>Generation: {generation}</GenerationTracker>
 
-      <ButtonDiv>
+      <FeatureDiv>
         <StyledButton
           variant="contained"
           color="primary"
@@ -138,10 +161,27 @@ const GameGrid = () => {
         >
           {simulationActive ? "Stop" : "Start"}
         </StyledButton>
-        <StyledButton variant="contained" onClick={clearBuffer}>
+        <StyledButton
+          variant="contained"
+          color="secondary"
+          onClick={clearBuffer}
+        >
           Clear
         </StyledButton>
-      </ButtonDiv>
+        <StyledButton variant="contained" onClick={randomizeBuffer}>
+          Random
+        </StyledButton>
+      </FeatureDiv>
+      <FeatureDiv>
+        <label>Interval</label>
+        <Slider
+          color="primary"
+          min={50}
+          value={stepSpeed}
+          max={2500}
+          onChange={speedChangeHandler}
+        />
+      </FeatureDiv>
     </>
   );
 };
@@ -154,7 +194,7 @@ const Row = styled.div`
   align-items: center;
 `;
 
-const ButtonDiv = styled.div`
+const FeatureDiv = styled.div`
   padding: 1%;
 `;
 
