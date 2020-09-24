@@ -1,10 +1,11 @@
 import React, { useState, useRef, useCallback } from "react";
-import { Button, Slider } from "@material-ui/core";
+import { Button, Slider, Select, InputLabel } from "@material-ui/core";
 import styled from "styled-components";
 import produce from "immer";
 
-const initialRows = 25;
-const initialCols = 25;
+const initialDimensions = 25;
+const initialRows = initialDimensions;
+const initialCols = initialDimensions;
 
 let initialBuffer = [];
 for (let i = 0; i < initialRows; i++) {
@@ -22,6 +23,7 @@ const GameGrid = () => {
   const [rows, setRows] = useState(initialRows);
   // eslint-disable-next-line
   const [cols, setCols] = useState(initialCols);
+  const [dimensions, setDimenions] = useState(initialDimensions);
   const [generation, setGeneration] = useState(1);
   const [stepSpeed, setStepSpeed] = useState(1000);
   const addGeneration = () => {
@@ -32,6 +34,10 @@ const GameGrid = () => {
   simulationActiveRef.current = simulationActive;
   const stepSpeedRef = useRef(stepSpeed);
   stepSpeedRef.current = stepSpeed;
+  const rowsRef = useRef(rows);
+  rowsRef.current = rows;
+  const colsRef = useRef(cols);
+  colsRef.current = cols;
 
   const simulation = useCallback(() => {
     if (!simulationActiveRef.current) return;
@@ -111,6 +117,27 @@ const GameGrid = () => {
     stepSpeedRef.current = value;
   };
 
+  const dimensionChangeHandler = (e) => {
+    // console.log(e.target.value);
+    setDimenions(e.target.value);
+    setRows(e.target.value);
+    rowsRef.current = e.target.value;
+    setCols(e.target.value);
+    colsRef.current = e.target.value;
+    // console.log(rowsRef.current);
+
+    setBuffer((buffer) => {
+      let newBuffer = [];
+      for (let i = 0; i < rowsRef.current; i++) {
+        newBuffer[i] = [];
+        for (let j = 0; j < colsRef.current; j++) {
+          newBuffer[i][j] = false;
+        }
+      }
+      return newBuffer;
+    });
+  };
+
   return (
     <>
       <div style={{ border: "2px solid black" }}>
@@ -147,7 +174,7 @@ const GameGrid = () => {
 
       <GenerationTracker>Generation: {generation}</GenerationTracker>
 
-      <FeatureDiv>
+      <FeatureDiv style={{ display: "flex", justifyContent: "center" }}>
         <StyledButton
           variant="contained"
           color="primary"
@@ -181,6 +208,17 @@ const GameGrid = () => {
           max={2500}
           onChange={speedChangeHandler}
         />
+        <InputLabel id="select-label">Dimensions</InputLabel>
+        <Select
+          native
+          labelId="select-label"
+          value={dimensions}
+          onChange={dimensionChangeHandler}
+        >
+          <option value={25}>25 x 25</option>
+          <option value={50}>50 x 50</option>
+          <option value={100}>100 x 100</option>
+        </Select>
       </FeatureDiv>
     </>
   );
@@ -196,6 +234,7 @@ const Row = styled.div`
 
 const FeatureDiv = styled.div`
   padding: 1%;
+  width: 60%;
 `;
 
 const StyledButton = styled(Button)`
