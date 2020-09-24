@@ -140,6 +140,9 @@ const GameGrid = () => {
 
   return (
     <>
+      <h1 style={{ wordWrap: "normal", textAlign: "center" }}>
+        Conway's Game of Life
+      </h1>
       <div style={{ border: "2px solid black" }}>
         {nowBuffer.map((row, rowIndex) => (
           <Row key={rowIndex}>
@@ -147,8 +150,8 @@ const GameGrid = () => {
               return (
                 <div
                   style={{
-                    width: "1.5rem",
-                    height: "1.5rem",
+                    width: `${50 / dimensions}vw`,
+                    height: `${50 / dimensions}vw`,
                     border: "1px solid darkgray",
                     backgroundColor: nowBuffer[rowIndex][cellIndex]
                       ? "navy"
